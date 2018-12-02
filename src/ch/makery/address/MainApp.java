@@ -5,10 +5,15 @@
  */
 package ch.makery.address;
 
+import ch.makery.address.view.PersonOverviewController;
+import ch.makery.address.model.Person;
 import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.application.Application;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -23,6 +28,32 @@ public class MainApp extends Application {
 
     private Stage primaryStage;
     private BorderPane rootLayout;
+    private ObservableList<Person> personData = FXCollections.observableArrayList();
+
+    /**
+     * Constructor
+     */
+    public MainApp() {
+        // Add some sample data
+        personData.add(new Person(new SimpleStringProperty("Hans"), new SimpleStringProperty("Muster")));
+        personData.add(new Person(new SimpleStringProperty("Ruth"), new SimpleStringProperty("Mueller")));
+        personData.add(new Person(new SimpleStringProperty("Heinz"), new SimpleStringProperty("Kurz")));
+        personData.add(new Person(new SimpleStringProperty("Cornelia"), new SimpleStringProperty("Meier")));
+        personData.add(new Person(new SimpleStringProperty("Werner"), new SimpleStringProperty("Meyer")));
+        personData.add(new Person(new SimpleStringProperty("Lydia"), new SimpleStringProperty("Kunz")));
+        personData.add(new Person(new SimpleStringProperty("Anna"), new SimpleStringProperty("Best")));
+        personData.add(new Person(new SimpleStringProperty("Stefan"), new SimpleStringProperty("Meier")));
+        personData.add(new Person(new SimpleStringProperty("Martin"), new SimpleStringProperty("Mueller")));
+    }
+
+    /**
+     * Returns the data as an observable list of Persons.
+     *
+     * @return
+     */
+    public ObservableList<Person> getPersonData() {
+        return personData;
+    }
 
     @Override
     public void start(Stage primaryStage) {
@@ -70,6 +101,10 @@ public class MainApp extends Application {
 
             //Set person overview into the center of root layout
             rootLayout.setCenter(personOverview);
+
+            // Give the controller access to the main app.
+            PersonOverviewController controller = loader.getController();
+            controller.setMainApp(this);
         } catch (IOException ex) {
             Logger.getLogger(MainApp.class.getName()).log(Level.SEVERE, null, ex);
         }
